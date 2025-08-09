@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  /* Brand palette */
+  --brand-start: #667eea; /* indigo-400 */
+  --brand-end: #764ba2;   /* purple-500 */
+  --success-start: #4facfe;
+  --success-end: #00f2fe;
+  --warning-start: #fa709a;
+  --warning-end: #fee140;
+  --danger-start: #ff9a9e;
+  --danger-end: #fecfef;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  /* Motion */
+  --transition-fast: 150ms ease-out;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --glass-bg: rgba(20, 20, 20, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* Explicit dark-mode class override to support manual toggle */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --glass-bg: rgba(20, 20, 20, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Utilities: gradients, glass, animations */
+
+/* Brand gradient background helper */
+.bg-brand-gradient {
+  background-image: linear-gradient(135deg, var(--brand-start) 0%, var(--brand-end) 100%);
+}
+
+/* Glassmorphism card helper */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: saturate(160%) blur(12px);
+}
+
+/* Keyframes */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes subtle-pop {
+  0% { transform: scale(0.98); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Animation utility classes */
+.animate-fade-in-up { animation: fade-in-up 0.6s var(--transition-normal) both; }
+.animate-subtle-pop { animation: subtle-pop 0.35s var(--transition-fast) both; }
+
+/* Upload drag-over state helper */
+.drag-over {
+  transform: scale(1.01);
+  transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+}
