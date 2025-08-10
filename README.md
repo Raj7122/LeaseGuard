@@ -1,10 +1,10 @@
-# LeaseGuard 🏠
+# LeaseGuard 
 
 **AI-Powered Lease Analysis & Legal Compliance Platform**
 
 LeaseGuard is a cutting-edge web application that leverages artificial intelligence to analyze residential and commercial lease agreements, automatically detect potential legal violations, and provide intelligent legal guidance through conversational AI.
 
-## 🎯 Problem Statement
+## Problem Statement
 
 Renting a property involves complex legal documents that most tenants struggle to understand. Traditional lease review processes are:
 - **Time-consuming**: Manual review takes hours of legal expertise
@@ -18,11 +18,11 @@ LeaseGuard solves these problems by providing:
 - **Legal Guidance**: Conversational AI for lease-related questions
 - **Compliance Monitoring**: Real-time tracking of lease violations
 
-## 🧠 Redis Hackathon Alignment
+## Redis Hackathon Alignment
 - **Prompt 1 – AI + Redis real-time data layer**: Hybrid vector search with RediSearch KNN, semantic caching in Redis JSON with TTL, real-time Streams for processing, Pub/Sub for collaboration, and TimeSeries for AI/search telemetry.
 - **Prompt 2 – Beyond the Cache (multi-model)**: Uses Redis as a primary store (JSON), full-text + vector search (RediSearch), real-time Streams and Pub/Sub, TimeSeries for analytics, Lists/Sets for session and UX data.
 
-## 🏗️ Technical Architecture
+## Technical Architecture
 
 ### **Frontend Stack**
 - **Framework**: Next.js 15.4.4 with React 19.1.0
@@ -52,7 +52,7 @@ User Upload → PDF Processing → AI Analysis → Redis Caching → Database St
 Chat Interface → Semantic Search → AI Context → Response Generation → User Interface
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### **Prerequisites**
 - Node.js 18+ 
@@ -138,7 +138,7 @@ Chat Interface → Semantic Search → AI Context → Response Generation → Us
 
 2. **Production**: Use Redis Cloud or self-hosted Redis with Redis Stack
 
-## 🔄 Redis Integration
+## Redis Integration
 
 ### Redis Stack Capabilities Used
 - **Redis JSON** (primary data model): Stores leases, clauses, sessions, semantic cache entries
@@ -179,7 +179,7 @@ LPUSH recent_searches:lease-123 "late fee"
 LPUSH conversation:session-123 '{"role":"user","content":"Is the pet deposit refundable?"}'
 ```
 
-## 📱 Features
+## Features
 
 ### **Core Functionality**
 - **Document Upload**: Drag & drop PDF lease agreements
@@ -195,7 +195,7 @@ LPUSH conversation:session-123 '{"role":"user","content":"Is the pet deposit ref
 - **Security Features**: OWASP-compliant security middleware
 - **Responsive Design**: Mobile-first, accessible interface
 
-## 🛠️ Development
+## Development
 
 ### **Available Scripts**
 ```bash
@@ -232,7 +232,7 @@ src/
 - **Caching**: `redis` for high-performance data storage
 - **Authentication**: `@clerk/nextjs` for user management
 
-## 🔒 Security Features
+##  Security Features
 
 ### **OWASP Top 10 Compliance**
 - **Injection Protection**: Input validation and sanitization
@@ -247,7 +247,7 @@ src/
 - **File Upload Security**: Malicious file detection
 - **Monitoring**: Real-time security event tracking
 
-## 📊 Performance & Monitoring
+##  Performance & Monitoring
 
 ### **Analytics Endpoints**
 - `/api/analytics/performance` - Performance metrics
@@ -260,7 +260,7 @@ src/
 - AI service availability
 - Database connection status
 
-## 🚀 Deployment
+##  Deployment
 
 ### **Production Build**
 ```bash
@@ -282,7 +282,7 @@ docker run -p 3000:3000 --env-file .env.production leaseguard
 - Fill in production values
 - Ensure all secrets are properly secured
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -290,11 +290,11 @@ docker run -p 3000:3000 --env-file .env.production leaseguard
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## Support
 
 - **Documentation**: [docs.leaseguard.com](https://docs.leaseguard.com)
 - **Issues**: [GitHub Issues](https://github.com/yourusername/leaseguard/issues)
