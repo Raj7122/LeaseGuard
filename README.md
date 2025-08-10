@@ -18,6 +18,10 @@ LeaseGuard solves these problems by providing:
 - **Legal Guidance**: Conversational AI for lease-related questions
 - **Compliance Monitoring**: Real-time tracking of lease violations
 
+## 🧠 Redis Hackathon Alignment
+- **Prompt 1 – AI + Redis real-time data layer**: Hybrid vector search with RediSearch KNN, semantic caching in Redis JSON with TTL, real-time Streams for processing, Pub/Sub for collaboration, and TimeSeries for AI/search telemetry.
+- **Prompt 2 – Beyond the Cache (multi-model)**: Uses Redis as a primary store (JSON), full-text + vector search (RediSearch), real-time Streams and Pub/Sub, TimeSeries for analytics, Lists/Sets for session and UX data.
+
 ## 🏗️ Technical Architecture
 
 ### **Frontend Stack**
@@ -136,35 +140,47 @@ Chat Interface → Semantic Search → AI Context → Response Generation → Us
 
 ## 🔄 Redis Integration
 
-LeaseGuard leverages Redis for multiple critical functions:
+### Redis Stack Capabilities Used
+- **Redis JSON** (primary data model): Stores leases, clauses, sessions, semantic cache entries
+  - Keys: `lease:{leaseId}`, `clause:{leaseId}_*`, `session:{sessionId}`, `semantic_cache:*`
+- **RediSearch (Full‑Text + Vector KNN)**: Hybrid search across clauses with semantic similarity
+  - Index: `clause_idx` over JSON with TEXT, TAG, VECTOR fields
+- **Redis Streams**: Event-sourced processing pipeline (`lease_processing_stream`) and `commands`
+- **Redis Pub/Sub**: Real-time collaboration and violation alerts (`collaboration:{sessionId}`, `violation_alerts`)
+- **Redis TimeSeries**: Performance, reliability, and cache metrics (`processing_time:*`, `success_rate:*`, `throughput:*`, `cache_*:*`)
+- **Lists/Sets**: Recent searches (`recent_searches:{leaseId}`), conversation history (`conversation:{sessionId}`), session participants (`session:{id}:participants`)
 
-### **Vector Search & Semantic Caching**
-- **Clause Similarity**: Stores 768-dimensional embeddings for lease clauses
-- **Semantic Matching**: Enables intelligent clause comparison and search
-- **Cache Warming**: Pre-loads frequently accessed lease data
-
-### **Real-time Data Processing**
-- **Event Streams**: Tracks document processing events and user interactions
-- **Time Series Data**: Monitors application performance and user behavior
-- **Command Storage**: Maintains audit trail of all system operations
-
-### **Performance Optimization**
-- **Session Caching**: Stores user session data and conversation history
-- **Search Results**: Caches frequently requested search queries
-- **Document Metadata**: Stores processed lease information for quick access
-
-### **Redis Commands Used**
+### Example Redis Operations
 ```bash
-# Vector Search
-FT.CREATE lease_clauses ON JSON PREFIX 1 lease: SCHEMA $.clause_text AS text TEXT $.embedding AS embedding VECTOR FLOAT32 768
+# RediSearch: JSON + Vector index (abbrev.)
+FT.CREATE clause_idx ON JSON PREFIX 1 clause: \
+  SCHEMA $.text AS text TEXT \
+         $.vector AS vector VECTOR FLAT 6 TYPE FLOAT32 DIM 768 DISTANCE_METRIC COSINE \
+         $.metadata.leaseId AS metadata.leaseId TAG \
+         $.metadata.severity AS metadata.severity TAG \
+         $.metadata.flagged AS metadata.flagged TAG
 
-# Time Series
-TS.CREATE user_activity
-TS.ADD user_activity * 1
+# Hybrid query (text + KNN vector)
+FT.SEARCH clause_idx '(@text:"late fee")=>[KNN 10 @vector $vector AS score]' \
+  PARAMS 2 vector <BINARY_VECTOR> \
+  RETURN 3 text metadata score SORTBY score LIMIT 0 10
 
-# Streams
-XADD processing_events * user_id 123 file_name lease.pdf status processing
+# Streams: processing events
+XADD lease_processing_stream * eventId evt-1 type document_uploaded data '{"leaseId":"123"}' timestamp 2025-01-01T00:00:00Z
+
+# Pub/Sub: real-time collaboration
+PUBLISH collaboration:session-123 '{"type":"message_sent","userId":"u1"}'
+
+# TimeSeries: metrics
+TS.ADD processing_time:total_processing * 123 LABELS operation total_processing component document_processor
+
+# Lists: recent searches & conversation
+LPUSH recent_searches:lease-123 "late fee"   
+LPUSH conversation:session-123 '{"role":"user","content":"Is the pet deposit refundable?"}'
 ```
+
+### RedisInsight (recommended for demo)
+- Add your Redis and watch keys update live during: upload (Streams/JSON), search (Lists/RediSearch), chat (Lists/Pub/Sub), and analytics (TimeSeries).
 
 ## 📱 Features
 
