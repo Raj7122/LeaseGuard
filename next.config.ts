@@ -119,6 +119,13 @@ const nextConfig: NextConfig = {
 
   // Webpack configuration for security
   webpack: (config, { dev, isServer }) => {
+    // Stub native 'canvas' dependency to avoid build-time resolution on serverless builders
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      canvas: false,
+    };
+
     // Security: Remove console.log in production
     if (!dev) {
       try {
