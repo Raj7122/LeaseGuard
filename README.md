@@ -179,9 +179,6 @@ LPUSH recent_searches:lease-123 "late fee"
 LPUSH conversation:session-123 '{"role":"user","content":"Is the pet deposit refundable?"}'
 ```
 
-### RedisInsight (recommended for demo)
-- Add your Redis and watch keys update live during: upload (Streams/JSON), search (Lists/RediSearch), chat (Lists/Pub/Sub), and analytics (TimeSeries).
-
 ## 📱 Features
 
 ### **Core Functionality**
